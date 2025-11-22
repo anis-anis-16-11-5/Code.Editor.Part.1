@@ -1,0 +1,440 @@
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرر الكود الجزء الاول 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- نمط ديناميكي للتحكم في لون النص التوضيحي (Placeholder) -->
+    <style id="dynamic-placeholder-style">
+        #codeInput::placeholder, #editCodeInput::placeholder { color: white; opacity: 0.5; }
+        #codeInput::-webkit-input-placeholder, #editCodeInput::-webkit-input-placeholder { color: white; opacity: 0.5; }
+        #codeInput::-moz-placeholder, #editCodeInput::-moz-placeholder { color: white; opacity: 0.5; }
+    </style>
+
+    <style>
+        body { font-family: 'Cairo', sans-serif; }
+        .settings-panel {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background-color: #2d3748; padding: 20px; border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); width: 90%; max-width: 450px;
+            z-index: 50; max-height: 85vh; overflow-y: auto;
+        }
+        .settings-panel.open { display: block; }
+        .color-picker {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background-color: #2d3748; padding: 20px; border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); z-index: 60;
+        }
+        .color-picker.open { display: block; }
+        .color-option {
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: inline-block; margin: 5px; position: relative; border: 2px solid transparent;
+        }
+        .color-option:hover { transform: scale(1.1); }
+        .color-option.selected { border-color: white; }
+        .color-option.selected::after {
+            content: '\f00c'; font-family: 'Font Awesome 5 Free'; font-weight: 900;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #333; font-size: 14px;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1a202c; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #4a5568; border-radius: 3px; }
+        #toast { transition: opacity 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-black text-white">
+    <!-- إشعار منبثق -->
+    <div id="toast" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white px-6 py-3 rounded-lg shadow-xl z-50 border border-gray-600 text-center w-auto whitespace-nowrap">
+        <span id="toastMessage"></span>
+    </div>
+
+    <!-- الصفحة الترحيبية (معدلة حسب الطلب) -->
+    <div id="welcomePage" class="container mx-auto p-4 flex flex-col h-screen justify-center">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold mb-4 text-blue-500 leading-tight">محرر الكود الجزء الاول 1</h1>
+            <p class="text-xl text-gray-300">أهلاً بك! استمتع بتجربة برمجية سلسة وممتعة.</p>
+        </header>
+        
+        <div class="overflow-y-auto custom-scrollbar bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800 max-h-[60vh]">
+            <!-- قسم: ما الذي يفعله هذا التطبيق -->
+            <section class="mb-8 border-b border-gray-700 pb-6">
+                <h2 class="text-2xl font-bold mb-4 text-green-400 flex items-center">
+                    <i class="fas fa-laptop-code ml-3"></i>
+                    ما الذي يفعله هذا التطبيق؟
+                </h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    يوفر لك هذا التطبيق بيئة عمل متكاملة لكتابة وتحرير أكواد 
+                    <span class="font-bold text-white">HTML</span> و 
+                    <span class="font-bold text-white">CSS</span> و 
+                    <span class="font-bold text-white">JavaScript</span>.
+                    يمكنك من خلاله رفع ملفاتك البرمجية، التعديل عليها، تغيير ألوان المحرر لراحة عينيك، ومعاينة النتائج بشكل فوري، بالإضافة إلى إمكانية حفظ مشروعك بالكامل كملف مضغوط منظم.
+                </p>
+            </section>
+
+            <!-- قسم: كيف تستخدم هذا التطبيق -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 text-yellow-400 flex items-center">
+                    <i class="fas fa-question-circle ml-3"></i>
+                    كيف تستخدم هذا التطبيق؟
+                </h2>
+                <ul class="space-y-3 text-lg text-gray-300 list-none">
+                    <li class="flex items-start">
+                        <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 flex-shrink-0 mt-1 font-bold">1</span>
+                        <span>اضغط على زر <b>"ابدأ الآن"</b> في الأسفل للدخول إلى واجهة المحرر.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 flex-shrink-0 mt-1 font-bold">2</span>
+                        <span>لرفع ملف موجود مسبقاً، استخدم أيقونة <b>الرفع</b> <i class="fas fa-upload mx-1 text-sm"></i> الموجودة في الشريط العلوي.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 flex-shrink-0 mt-1 font-bold">3</span>
+                        <span>اكتب الكود أو قم بتعديله في مساحة العمل السوداء. يمكنك تغيير لون النص من الإعدادات.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 flex-shrink-0 mt-1 font-bold">4</span>
+                        <span>اضغط على زر <b>"معاينة النتيجة"</b> لمشاهدة مخرجات الكود فوراً.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center ml-3 flex-shrink-0 mt-1 font-bold">5</span>
+                        <span>في صفحة النتائج، يمكنك تحميل المشروع كاملاً داخل مجلد باسم من اختيارك.</span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="text-center mt-8">
+            <button id="startButton" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-10 rounded-full text-xl font-bold hover:from-blue-700 hover:to-purple-700 transition duration-300 shadow-lg transform hover:scale-105 ring-2 ring-blue-400 ring-opacity-50">
+                ابدأ الآن <i class="fas fa-arrow-left mr-2"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- صفحة المحرر -->
+    <div id="editorPage" class="hidden container mx-auto p-4">
+        <header class="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
+            <div class="text-right">
+                <h1 class="text-3xl font-bold text-white">منطقة العمل</h1>
+                <div class="text-sm text-gray-400 mt-1 flex items-center">
+                    <i class="fas fa-file-code ml-2"></i>
+                    <span id="fileName">new_file.html</span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <input type="file" id="fileInput" class="hidden" />
+                <button id="uploadButton" class="text-white w-10 h-10 rounded-full transition shadow flex items-center justify-center hover:bg-gray-800" title="رفع ملف">
+                    <i id="uploadButtonIcon" class="fas fa-upload text-xl transition-colors duration-300"></i>
+                </button>
+                <button id="settingsButton" class="text-white w-10 h-10 rounded-full transition shadow flex items-center justify-center hover:bg-gray-800" title="الإعدادات">
+                    <i id="settingsButtonIcon" class="fas fa-cog text-xl transition-colors duration-300"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="bg-gray-900 p-1 rounded-lg shadow-2xl border border-gray-700 relative">
+            <div id="colorIndicator" class="absolute top-2 left-2 w-4 h-4 rounded-full border border-white shadow-sm" style="background-color: white;" title="اللون الحالي للكتابة"></div>
+            <textarea id="codeInput" class="w-full h-[65vh] p-4 bg-black text-white font-mono text-lg border-none outline-none resize-none rounded-lg" placeholder="اكتب الكود هنا..."></textarea>
+        </main>
+        
+        <button id="sendButton" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 font-bold text-lg shadow-lg">
+            <i class="fas fa-play ml-2"></i> معاينة النتيجة
+        </button>
+    </div>
+
+    <!-- صفحة النتائج -->
+    <div id="resultPage" class="hidden fixed inset-0 bg-black p-4 overflow-hidden z-40 flex flex-col">
+        <div class="flex justify-between items-center mb-4 bg-gray-900 p-3 rounded-lg border border-gray-700">
+            <h2 class="text-xl font-bold text-green-400 flex items-center hidden md:flex"><i class="fas fa-desktop ml-2"></i> المعاينة</h2>
+            <div class="flex space-x-3 space-x-reverse items-center w-full md:w-auto justify-between md:justify-end">
+                <button id="backButton" class="text-white hover:text-gray-300 transition text-lg px-2 flex items-center" title="رجوع للمحرر"><i class="fas fa-arrow-right ml-1"></i> رجوع</button>
+                <div class="h-6 w-px bg-gray-600 mx-1"></div>
+                
+                <!-- زر الرفع الجديد في الأعلى -->
+                <input type="file" id="fileInputResult" class="hidden" />
+                <button id="uploadButtonResult" class="text-white hover:text-green-400 transition text-lg p-2" title="رفع ملف جديد">
+                    <i class="fas fa-upload"></i>
+                </button>
+
+                <button id="copyButton" class="text-white hover:text-blue-400 transition text-lg p-2" title="نسخ الكود"><i class="fas fa-copy"></i></button>
+                <button id="downloadButton" class="text-white hover:text-green-400 transition text-lg p-2" title="تنزيل ZIP"><i class="fas fa-download"></i></button>
+                <button id="menuButton" class="text-white hover:text-yellow-400 transition text-lg p-2" title="تعديل سريع"><i class="fas fa-edit"></i></button>
+                <button id="settingsButtonResult" class="text-white hover:text-gray-300 transition text-lg p-2" title="الإعدادات"><i class="fas fa-cog"></i></button>
+            </div>
+        </div>
+        
+        <div class="flex-grow bg-white rounded-lg overflow-hidden border border-gray-600 relative">
+            <iframe id="resultFrame" class="w-full h-full border-none"></iframe>
+        </div>
+        <div class="mt-2 text-center">
+            <span class="text-sm text-gray-500" id="fileNameResult">index.html</span>
+        </div>
+    </div>
+
+    <!-- نافذة التعديل السريع -->
+    <div id="menu" class="hidden fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-xl shadow-2xl w-full max-w-2xl border border-gray-700">
+            <h2 class="text-2xl font-bold mb-4 text-yellow-400">تعديل سريع</h2>
+            <textarea id="editCodeInput" class="w-full h-64 p-4 border border-gray-600 rounded-lg mb-4 bg-black text-white font-mono outline-none focus:border-yellow-400"></textarea>
+            <div class="flex gap-4">
+                <button id="updateButton" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-bold">تحديث</button>
+                <button id="closeMenuButton" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition font-bold">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة التنزيل -->
+    <div id="folderNameModal" class="hidden fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md border border-gray-600">
+            <h2 class="text-xl font-bold mb-4 text-center">تسمية المشروع</h2>
+            <input id="folderNameInput" type="text" class="w-full p-3 border border-gray-600 rounded-lg mb-6 bg-gray-900 text-white text-center focus:border-blue-500 outline-none" placeholder="اسم المجلد (مثلاً: موقعي)">
+            <div class="flex gap-3">
+                <button id="confirmDownloadButton" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">تنزيل</button>
+                <button id="closeFolderNameModalButton" class="flex-1 bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-500 transition">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة الإعدادات -->
+    <div id="settingsPanel" class="settings-panel">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-600 pb-4">
+            <h3 class="text-2xl font-bold text-white">الإعدادات</h3>
+            <button id="closeSettingsButton" class="text-gray-400 hover:text-red-500 transition text-2xl">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mb-8 text-center">
+            <p class="text-gray-400 mb-3 text-sm">لون النص والمحرر والأيقونات</p>
+             <button id="colorTextButton" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg flex items-center justify-center transition group">
+                <div class="w-6 h-6 rounded-full border border-gray-400 mr-3 group-hover:scale-110 transition" id="settingsColorPreview" style="background-color: white;"></div>
+                <span>اختر لوناً</span>
+            </button>
+        </div>
+
+        <div class="border-t border-gray-600 pt-6">
+            <h4 class="text-lg font-semibold mb-4 text-center text-blue-300">تواصل معنا</h4>
+            <div class="grid grid-cols-4 gap-4 justify-items-center">
+                <a href="https://youtube.com/@anis_anis_16?si=P_2TpyeUuXCFtBrS" target="_blank" class="text-red-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.facebook.com/share/14U8TM2jNtJ/" target="_blank" class="text-blue-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/anis.anis.16.11.5?igsh=bjNrOXYxanh5NGl3" target="_blank" class="text-pink-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@anis.anis.16.11.5?_r=1&_t=ZM-91GNolZxPPX" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center shadow-sm border border-gray-700" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://t.me/anis_anis_1000_10" target="_blank" class="text-blue-400 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="https://invite.viber.com/?g2=AQAv%2F7gdbtk4zlKKjkTxqLoSmTr3BQt%2BUblCnMTBR3Chxv6yzIAiG7DwnvIgPMBg" target="_blank" class="text-purple-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Viber"><i class="fab fa-viber"></i></a>
+                <a href="https://whatsapp.com/channel/0029Vb6NujcEVccM2rv3YM0q" target="_blank" class="text-green-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.threads.com/@anis.anis.16.11.5" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Threads"><i class="fas fa-at"></i></a>
+                <a href="https://github.com/anis-anis-16-11-5" target="_blank" class="text-gray-300 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://codepen.io/anis_anis_dz" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="CodePen"><i class="fab fa-codepen"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة اختيار الألوان -->
+    <div id="colorPicker" class="color-picker">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-white font-bold">اختر لوناً</h3>
+            <button id="closeColorPickerButton" class="text-gray-400 hover:text-red-500 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="flex flex-wrap justify-center gap-3">
+            <div class="color-option bg-white selected" data-color="white" title="أبيض"></div>
+            <div class="color-option bg-red-500" data-color="#ef4444" title="أحمر"></div>
+            <div class="color-option bg-green-500" data-color="#22c55e" title="أخضر"></div>
+            <div class="color-option bg-blue-500" data-color="#3b82f6" title="أزرق"></div>
+            <div class="color-option bg-yellow-500" data-color="#eab308" title="أصفر"></div>
+            <div class="color-option bg-purple-500" data-color="#a855f7" title="بنفسجي"></div>
+            <div class="color-option bg-pink-500" data-color="#ec4899" title="زهري"></div>
+            <div class="color-option bg-orange-500" data-color="#f97316" title="برتقالي"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+        let selectedColor = 'white';
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            toast.classList.remove('hidden');
+            void toast.offsetWidth; 
+            toast.style.opacity = '1';
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 3000);
+        }
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            document.getElementById('welcomePage').classList.add('hidden');
+            document.getElementById('editorPage').classList.remove('hidden');
+        });
+
+        document.getElementById('backButton').addEventListener('click', function() {
+            document.getElementById('resultPage').classList.add('hidden');
+        });
+
+        function triggerUpload(inputId) { document.getElementById(inputId).click(); }
+        document.getElementById('uploadButton').onclick = () => triggerUpload('fileInput');
+        document.getElementById('uploadButtonResult').onclick = () => triggerUpload('fileInputResult');
+
+        const handleFile = (e, isResult) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.name.endsWith('.zip')) handleZipFile(file, isResult);
+            else handleTextFile(file, isResult);
+        };
+
+        document.getElementById('fileInput').onchange = (e) => handleFile(e, false);
+        document.getElementById('fileInputResult').onchange = (e) => handleFile(e, true);
+
+        function handleTextFile(file, isResult) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                if (isResult) {
+                    document.getElementById('resultFrame').srcdoc = content;
+                    document.getElementById('fileNameResult').textContent = file.name;
+                } else {
+                    document.getElementById('codeInput').value = content;
+                    document.getElementById('fileName').textContent = file.name;
+                }
+                showToast(`تم فتح الملف: ${file.name}`);
+            };
+            reader.readAsText(file);
+        }
+
+        function handleZipFile(file, isResult) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                JSZip.loadAsync(e.target.result).then(function(zip) {
+                    let found = false;
+                    zip.forEach(function (relativePath, zipEntry) {
+                        if (!found && zipEntry.name.endsWith('.html')) {
+                            found = true;
+                            zipEntry.async("string").then(function (content) {
+                                if (isResult) {
+                                    document.getElementById('resultFrame').srcdoc = content;
+                                    document.getElementById('fileNameResult').textContent = zipEntry.name;
+                                } else {
+                                    document.getElementById('codeInput').value = content;
+                                    document.getElementById('fileName').textContent = zipEntry.name;
+                                }
+                                showToast(`تم استخراج: ${zipEntry.name}`);
+                            });
+                        }
+                    });
+                    if (!found) showToast('لم يتم العثور على ملف HTML في الأرشيف');
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        document.getElementById('sendButton').onclick = () => {
+            const code = document.getElementById('codeInput').value;
+            document.getElementById('resultFrame').srcdoc = code;
+            document.getElementById('resultPage').classList.remove('hidden');
+        };
+
+        document.getElementById('menuButton').onclick = () => {
+            document.getElementById('editCodeInput').value = document.getElementById('resultFrame').srcdoc || '';
+            document.getElementById('editCodeInput').style.color = selectedColor;
+            document.getElementById('menu').classList.remove('hidden');
+        };
+
+        document.getElementById('updateButton').onclick = () => {
+            document.getElementById('resultFrame').srcdoc = document.getElementById('editCodeInput').value;
+            document.getElementById('menu').classList.add('hidden');
+            showToast('تم التحديث');
+        };
+        
+        document.getElementById('closeMenuButton').onclick = () => document.getElementById('menu').classList.add('hidden');
+
+        document.getElementById('copyButton').onclick = () => {
+            const code = document.getElementById('resultFrame').srcdoc || document.getElementById('codeInput').value;
+            if(navigator.clipboard) {
+                navigator.clipboard.writeText(code).then(() => showToast('تم النسخ')).catch(() => showToast('فشل النسخ'));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = code;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast('تم النسخ');
+            }
+        };
+
+        document.getElementById('downloadButton').onclick = () => document.getElementById('folderNameModal').classList.remove('hidden');
+        document.getElementById('closeFolderNameModalButton').onclick = () => document.getElementById('folderNameModal').classList.add('hidden');
+        
+        document.getElementById('confirmDownloadButton').onclick = () => {
+            const name = document.getElementById('folderNameInput').value.trim() || 'project';
+            const code = document.getElementById('resultFrame').srcdoc || document.getElementById('codeInput').value || '';
+            const zip = new JSZip();
+            
+            // التعديل الجديد: إنشاء مجلد بنفس الاسم
+            const folder = zip.folder(name);
+            folder.file("index.html", code); // وضع الملف داخل المجلد
+
+            zip.generateAsync({type:"blob"}).then(content => {
+                saveAs(content, name + ".zip");
+                document.getElementById('folderNameModal').classList.add('hidden');
+                showToast('جاري التحميل...');
+            });
+        };
+
+        const settingsPanel = document.getElementById('settingsPanel');
+        const colorPicker = document.getElementById('colorPicker');
+
+        document.getElementById('settingsButton').onclick = () => settingsPanel.classList.add('open');
+        document.getElementById('settingsButtonResult').onclick = () => settingsPanel.classList.add('open');
+        document.getElementById('closeSettingsButton').onclick = () => settingsPanel.classList.remove('open');
+
+        document.getElementById('colorTextButton').onclick = () => { colorPicker.classList.add('open'); };
+        document.getElementById('closeColorPickerButton').onclick = () => colorPicker.classList.remove('open');
+
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.onclick = function() {
+                const color = this.getAttribute('data-color');
+                selectedColor = color;
+                const codeInput = document.getElementById('codeInput');
+                const editCodeInput = document.getElementById('editCodeInput');
+                codeInput.style.color = color;
+                editCodeInput.style.color = color;
+
+                const uploadIcon = document.getElementById('uploadButtonIcon');
+                const settingsIcon = document.getElementById('settingsButtonIcon');
+                if(uploadIcon) uploadIcon.style.color = color;
+                if(settingsIcon) settingsIcon.style.color = color;
+
+                const styleTag = document.getElementById('dynamic-placeholder-style');
+                styleTag.innerHTML = `
+                    #codeInput::placeholder, #editCodeInput::placeholder { color: ${color}; opacity: 0.5; }
+                    #codeInput::-webkit-input-placeholder, #editCodeInput::-webkit-input-placeholder { color: ${color}; opacity: 0.5; }
+                    #codeInput::-moz-placeholder, #editCodeInput::-moz-placeholder { color: ${color}; opacity: 0.5; }
+                `;
+
+                document.getElementById('settingsColorPreview').style.backgroundColor = color;
+                document.getElementById('colorIndicator').style.backgroundColor = color;
+
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                showToast('تم تغيير اللون');
+                colorPicker.classList.remove('open');
+            };
+        });
+    </script>
+</body>
+</html>
+
+
