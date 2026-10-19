@@ -2,11 +2,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محرر الكود الجزء الاول 1</title>
+    <title>Code.Editor.Part.1</title>
+    <meta name="theme-color" content="#0b1020">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"></link>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <!-- نمط ديناميكي للتحكم في لون النص التوضيحي (Placeholder) -->
     <style id="dynamic-placeholder-style">
         #codeInput::placeholder, #editCodeInput::placeholder { color: white; opacity: 0.5; }
@@ -53,12 +57,12 @@
     </div>
 
     <!-- الصفحة الترحيبية (معدلة حسب الطلب) -->
-    <div id="welcomePage" class="container mx-auto p-4 flex flex-col h-screen justify-center">
+    <div id="welcomePage" class="fixed inset-0 z-50 bg-black overflow-y-auto container mx-auto p-4 flex flex-col h-screen justify-center" style="display: none;">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold mb-4 text-blue-500 leading-tight">محرر الكود الجزء الاول 1</h1>
             <p class="text-xl text-gray-300">أهلاً بك! استمتع بتجربة برمجية سلسة وممتعة.</p>
         </header>
-        
+
         <div class="overflow-y-auto custom-scrollbar bg-gray-900 p-6 rounded-xl shadow-2xl border border-gray-800 max-h-[60vh]">
             <!-- قسم: ما الذي يفعله هذا التطبيق -->
             <section class="mb-8 border-b border-gray-700 pb-6">
@@ -67,9 +71,9 @@
                     ما الذي يفعله هذا التطبيق؟
                 </h2>
                 <p class="text-lg text-gray-300 leading-relaxed">
-                    يوفر لك هذا التطبيق بيئة عمل متكاملة لكتابة وتحرير أكواد 
-                    <span class="font-bold text-white">HTML</span> و 
-                    <span class="font-bold text-white">CSS</span> و 
+                    يوفر لك هذا التطبيق بيئة عمل متكاملة لكتابة وتحرير أكواد
+                    <span class="font-bold text-white">HTML</span> و
+                    <span class="font-bold text-white">CSS</span> و
                     <span class="font-bold text-white">JavaScript</span>.
                     يمكنك من خلاله رفع ملفاتك البرمجية، التعديل عليها، تغيير ألوان المحرر لراحة عينيك، ومعاينة النتائج بشكل فوري، بالإضافة إلى إمكانية حفظ مشروعك بالكامل كملف مضغوط منظم.
                 </p>
@@ -114,7 +118,7 @@
     </div>
 
     <!-- صفحة المحرر -->
-    <div id="editorPage" class="hidden container mx-auto p-4">
+    <div id="editorPage" class="container mx-auto p-4">
         <header class="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
             <div class="text-right">
                 <h1 class="text-3xl font-bold text-white">منطقة العمل</h1>
@@ -131,6 +135,9 @@
                 <button id="settingsButton" class="text-white w-10 h-10 rounded-full transition shadow flex items-center justify-center hover:bg-gray-800" title="الإعدادات">
                     <i id="settingsButtonIcon" class="fas fa-cog text-xl transition-colors duration-300"></i>
                 </button>
+                <button id="helpButton" class="text-white w-10 h-10 rounded-full transition shadow flex items-center justify-center hover:bg-gray-800" title="التعليمات">
+                    <i class="fas fa-question-circle text-xl"></i>
+                </button>
             </div>
         </header>
 
@@ -138,7 +145,7 @@
             <div id="colorIndicator" class="absolute top-2 left-2 w-4 h-4 rounded-full border border-white shadow-sm" style="background-color: white;" title="اللون الحالي للكتابة"></div>
             <textarea id="codeInput" class="w-full h-[65vh] p-4 bg-black text-white font-mono text-lg border-none outline-none resize-none rounded-lg" placeholder="اكتب الكود هنا..."></textarea>
         </main>
-        
+
         <button id="sendButton" class="w-full mt-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-900 transition duration-300 font-bold text-lg shadow-lg">
             <i class="fas fa-play ml-2"></i> معاينة النتيجة
         </button>
@@ -151,7 +158,7 @@
             <div class="flex space-x-3 space-x-reverse items-center w-full md:w-auto justify-between md:justify-end">
                 <button id="backButton" class="text-white hover:text-gray-300 transition text-lg px-2 flex items-center" title="رجوع للمحرر"><i class="fas fa-arrow-right ml-1"></i> رجوع</button>
                 <div class="h-6 w-px bg-gray-600 mx-1"></div>
-                
+
                 <!-- زر الرفع الجديد في الأعلى -->
                 <input type="file" id="fileInputResult" class="hidden" />
                 <button id="uploadButtonResult" class="text-white hover:text-green-400 transition text-lg p-2" title="رفع ملف جديد">
@@ -164,9 +171,9 @@
                 <button id="settingsButtonResult" class="text-white hover:text-gray-300 transition text-lg p-2" title="الإعدادات"><i class="fas fa-cog"></i></button>
             </div>
         </div>
-        
+
         <div class="flex-grow bg-white rounded-lg overflow-hidden border border-gray-600 relative">
-            <iframe id="resultFrame" class="w-full h-full border-none"></iframe>
+            <iframe id="resultFrame" sandbox="allow-scripts allow-forms" class="w-full h-full border-none"></iframe>
         </div>
         <div class="mt-2 text-center">
             <span class="text-sm text-gray-500" id="fileNameResult">index.html</span>
@@ -205,7 +212,7 @@
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        
+
         <div class="mb-8 text-center">
             <p class="text-gray-400 mb-3 text-sm">لون النص والمحرر والأيقونات</p>
              <button id="colorTextButton" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-lg flex items-center justify-center transition group">
@@ -217,14 +224,14 @@
         <div class="border-t border-gray-600 pt-6">
             <h4 class="text-lg font-semibold mb-4 text-center text-blue-300">تواصل معنا</h4>
             <div class="grid grid-cols-4 gap-4 justify-items-center">
-                <a href="https://youtube.com/@anis_anis_16?si=P_2TpyeUuXCFtBrS" target="_blank" class="text-red-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="YouTube"><i class="fab fa-youtube"></i></a>
-                <a href="https://www.facebook.com/share/14U8TM2jNtJ/" target="_blank" class="text-blue-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/anis.anis.16.11.5?igsh=bjNrOXYxanh5NGl3" target="_blank" class="text-pink-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://www.tiktok.com/@anis.anis.16.11.5?_r=1&_t=ZM-91GNolZxPPX" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center shadow-sm border border-gray-700" title="TikTok"><i class="fab fa-tiktok"></i></a>
-                <a href="https://t.me/anis_anis_1000_10" target="_blank" class="text-blue-400 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Telegram"><i class="fab fa-telegram"></i></a>
+                <a href="https://youtube.com/@anis.16.11.5" target="_blank" class="text-red-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.facebook.com/anis.16.11.5" target="_blank" class="text-blue-600 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/anis.16.11.5" target="_blank" class="text-pink-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@anis.16.11.5" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center shadow-sm border border-gray-700" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://t.me/anis_16_11_5" target="_blank" class="text-blue-400 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Telegram"><i class="fab fa-telegram"></i></a>
                 <a href="https://invite.viber.com/?g2=AQAv%2F7gdbtk4zlKKjkTxqLoSmTr3BQt%2BUblCnMTBR3Chxv6yzIAiG7DwnvIgPMBg" target="_blank" class="text-purple-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Viber"><i class="fab fa-viber"></i></a>
-                <a href="https://whatsapp.com/channel/0029Vb6NujcEVccM2rv3YM0q" target="_blank" class="text-green-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.threads.com/@anis.anis.16.11.5" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Threads"><i class="fas fa-at"></i></a>
+                <a href="https://whatsapp.com/channel/0029VbD5x6b05MUYoEY1563K" target="_blank" class="text-green-500 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.threads.com/@anis.16.11.5" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="Threads"><i class="fas fa-at"></i></a>
                 <a href="https://github.com/anis-anis-16-11-5" target="_blank" class="text-gray-300 text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="GitHub"><i class="fab fa-github"></i></a>
                 <a href="https://codepen.io/anis_anis_dz" target="_blank" class="text-white text-3xl hover:scale-110 transition duration-200 bg-gray-800 p-2 rounded-lg hover:bg-gray-700 w-12 h-12 flex items-center justify-center" title="CodePen"><i class="fab fa-codepen"></i></a>
             </div>
@@ -251,20 +258,24 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="lib/jszip.min.js"></script>
+    <script src="lib/FileSaver.min.js"></script>
 
     <script>
         let selectedColor = 'white';
+
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            navigator.serviceWorker.register('service-worker.js').catch(() => {});
+        }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
             toastMessage.textContent = message;
             toast.classList.remove('hidden');
-            void toast.offsetWidth; 
+            void toast.offsetWidth;
             toast.style.opacity = '1';
-            
+
             setTimeout(() => {
                 toast.style.opacity = '0';
                 setTimeout(() => {
@@ -273,9 +284,36 @@
             }, 3000);
         }
 
+        function playDownloadSound() {
+            if (window.AndroidBridge) return;
+            const sound = new Audio('download-notification.mp3');
+            sound.volume = 0.75;
+            sound.play().catch(() => {});
+        }
+
+        function showDownloadNotification(fileName) {
+            showToast(`تم تنزيل الملف: ${fileName}`);
+            playDownloadSound();
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('Code.Editor.Part.1', {
+                    body: `تم حفظ ${fileName} في التنزيلات.`,
+                    icon: 'icons/icon-192.png'
+                });
+            }
+        }
+
+        window.nativeDownloadComplete = function(fileName) {
+            showToast(`تم حفظ الملف في التنزيلات: ${fileName}`);
+        };
+        window.nativeDownloadError = function() {
+            showToast('تعذر حفظ الملف في مجلد التنزيلات');
+        };
+
         document.getElementById('startButton').addEventListener('click', function() {
-            document.getElementById('welcomePage').classList.add('hidden');
-            document.getElementById('editorPage').classList.remove('hidden');
+            document.getElementById('welcomePage').style.display = 'none';
+        });
+        document.getElementById('helpButton').addEventListener('click', function() {
+            document.getElementById('welcomePage').style.display = 'flex';
         });
 
         document.getElementById('backButton').addEventListener('click', function() {
@@ -355,7 +393,7 @@
             document.getElementById('menu').classList.add('hidden');
             showToast('تم التحديث');
         };
-        
+
         document.getElementById('closeMenuButton').onclick = () => document.getElementById('menu').classList.add('hidden');
 
         document.getElementById('copyButton').onclick = () => {
@@ -373,23 +411,32 @@
             }
         };
 
-        document.getElementById('downloadButton').onclick = () => document.getElementById('folderNameModal').classList.remove('hidden');
+        document.getElementById('downloadButton').onclick = async () => {
+            if (!window.AndroidBridge && 'Notification' in window && Notification.permission === 'default') {
+                try { await Notification.requestPermission(); } catch (_) {}
+            }
+            document.getElementById('folderNameModal').classList.remove('hidden');
+        };
         document.getElementById('closeFolderNameModalButton').onclick = () => document.getElementById('folderNameModal').classList.add('hidden');
-        
+
         document.getElementById('confirmDownloadButton').onclick = () => {
-            const name = document.getElementById('folderNameInput').value.trim() || 'project';
+            const rawName = document.getElementById('folderNameInput').value.trim() || 'project';
+            const name = rawName.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '_').slice(0, 80) || 'project';
             const code = document.getElementById('resultFrame').srcdoc || document.getElementById('codeInput').value || '';
             const zip = new JSZip();
-            
-            // التعديل الجديد: إنشاء مجلد بنفس الاسم
             const folder = zip.folder(name);
-            folder.file("index.html", code); // وضع الملف داخل المجلد
-
-            zip.generateAsync({type:"blob"}).then(content => {
-                saveAs(content, name + ".zip");
+            folder.file("index.html", code);
+            const fileName = name + ".zip";
+            const isNativeApp = window.AndroidBridge && typeof window.AndroidBridge.saveZip === 'function';
+            zip.generateAsync({ type: isNativeApp ? 'base64' : 'blob' }).then(content => {
                 document.getElementById('folderNameModal').classList.add('hidden');
-                showToast('جاري التحميل...');
-            });
+                if (isNativeApp) {
+                    window.AndroidBridge.saveZip(content, fileName);
+                } else {
+                    saveAs(content, fileName);
+                    showDownloadNotification(fileName);
+                }
+            }).catch(() => showToast('فشل إنشاء ملف التنزيل'));
         };
 
         const settingsPanel = document.getElementById('settingsPanel');
@@ -428,7 +475,7 @@
 
                 document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
-                
+
                 showToast('تم تغيير اللون');
                 colorPicker.classList.remove('open');
             };
@@ -436,5 +483,3 @@
     </script>
 </body>
 </html>
-
-
