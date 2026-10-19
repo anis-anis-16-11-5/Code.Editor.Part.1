@@ -1,0 +1,48 @@
+{
+  "name": "code-editor-part-1-desktop",
+  "version": "1.0.0",
+  "description": "Code.Editor.Part.1 - Arabic HTML, CSS and JavaScript editor for Windows",
+  "author": "Code.Editor.Part.1",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.anis.codeeditor.part1",
+    "productName": "Code.Editor.Part.1",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "app/**/*",
+      "assets/icon.ico",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "Code.Editor.Part.1-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Code.Editor.Part.1",
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}
